@@ -6,9 +6,13 @@ const getAll = async (req, res) => {
 };
 
 const getById = async (req, res) => {
+  try {
     const { id } = req.params;
     const result = await SalesProductsService.getById(Number(id));
     return res.status(200).json(result);
+  } catch (error) {
+    return res.status(404).json({ message: 'Sale not found' });
+  }
 };
 
 const update = async (req, _res) => {
