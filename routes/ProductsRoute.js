@@ -13,4 +13,5 @@ routes.post('/', validateProducts, rescue(ProductsController.create));
 
 routes.put('/:id', validateProducts, rescue(ProductsController.update));
 
+routes.delete('/:id', rescue(ProductsController.destroy));
 module.exports = routes;
