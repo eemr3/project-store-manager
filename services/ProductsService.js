@@ -8,13 +8,19 @@ const getAll = async () => {
 
 const getById = async (id) => {
   const [product] = await ProductsModel.getById(id);
-  console.log(product);
   if (product === undefined) throw new Error('Product not found');
 
   return product;
 };
 
+const getByName = async (productName) => {
+  const [name] = await ProductsModel.getByName(productName);
+
+  return name;
+};
+
 module.exports = {
   getAll,
   getById,
+  getByName,
 };
