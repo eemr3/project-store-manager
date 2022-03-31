@@ -11,7 +11,7 @@ const getById = async (req, res) => {
     const product = await ProductsService.getById(Number(id));
     return res.status(200).json(product);
   } catch (error) {
-    return res.status(400).json({ message: error.message });
+    return res.status(404).json({ message: error.message });
   }
 };
 
@@ -27,9 +27,15 @@ const create = async (req, res) => {
 };
 
 const update = async (req, res) => {
-  const { name, quantity } = req.body;
+  try {
+    const { id } = req.params;
+    const { name, quantity } = req.body;
+    const result = await ProductsService.update({ id, name, quantity });
 
-  res.status(200).json({ n: name, q: quantity });
+    return res.status(200).json(result);
+  } catch (error) {
+    return res.status(404).json({ message: error.message });
+  }
 };
 
 module.exports = {
