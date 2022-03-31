@@ -20,11 +20,21 @@ const getByName = async (productName) => {
 };
 
 const create = async ({ name, quantity }) => {
-  console.log(name, quantity);
   const result = await connect.execute(`
   INSERT INTO products (name, quantity) VALUES (?, ?)`,
     [name, quantity]);
   return result;
+};
+
+const update = async ({ id, name, quantity }) => {
+  await connect.execute(`UPDATE products SET name = ?, quantity = ?
+  WHERE id = ?`, [name, quantity, id]);
+
+  return {
+    id,
+    name,
+    quantity,
+  };
 };
 
 module.exports = {
@@ -32,4 +42,5 @@ module.exports = {
   getById,
   getByName,
   create,
+  update,
 };
