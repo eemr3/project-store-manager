@@ -16,11 +16,20 @@ const getById = async (id) => {
 const getByName = async (productName) => {
   const [product] = await connect
     .execute('SELECT name FROM products WHERE name = ?', [productName]);
-  console.log(product);
+  return product;
+};
+
+const create = async ({ name, quantity }) => {
+  console.log(name, quantity);
+  const result = await connect.execute(`
+  INSERT INTO products (name, quantity) VALUES (?, ?)`,
+    [name, quantity]);
+  return result;
 };
 
 module.exports = {
   getAll,
   getById,
   getByName,
+  create,
 };
