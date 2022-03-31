@@ -7,12 +7,20 @@ const getAll = async () => {
 };
 
 const getById = async (id) => {
-  const [product] = await connect.execute('SELECT * FROM products WHERE id = ?', [id]);
+  const [product] = await connect
+    .execute('SELECT * FROM products WHERE id = ?', [id]);
 
   return product;
+};
+
+const getByName = async (productName) => {
+  const [product] = await connect
+    .execute('SELECT name FROM products WHERE name = ?', [productName]);
+  console.log(product);
 };
 
 module.exports = {
   getAll,
   getById,
+  getByName,
 };
