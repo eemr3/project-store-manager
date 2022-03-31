@@ -45,10 +45,19 @@ const update = async ({ id, name, quantity }) => {
   return result;
 };
 
+const destroy = async (id) => {
+  const isExist = await getById(id);
+
+  if (isExist === undefined) throw new Error('Product not found');
+
+  await ProductsModel.destroy(id);
+};
+
 module.exports = {
   getAll,
   getById,
   getByName,
   create,
   update,
+  destroy,
 };
