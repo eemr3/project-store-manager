@@ -38,9 +38,20 @@ const update = async (req, res) => {
   }
 };
 
+const destroy = async (req, res) => {
+  try {
+    const { id } = req.params;
+    await ProductsService.destroy(Number(id));
+    return res.status(204).json();
+  } catch (error) {
+    return res.status(404).json({ message: error.message });
+  }
+};
+
 module.exports = {
   getAll,
   getById,
   create,
   update,
+  destroy,
 };
