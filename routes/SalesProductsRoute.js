@@ -8,7 +8,8 @@ routes.get('/', SalesProductsController.getAll);
 routes.get('/:id', SalesProductsController.getById);
 
 routes.post('/', validateSale, SalesProductsController.create);
-
 routes.put('/:id', validateSale, SalesProductsController.update);
+
+routes.delete('/:id', SalesProductsController.destroy);
 
 module.exports = routes;
