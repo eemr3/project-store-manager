@@ -28,9 +28,17 @@ const update = async ({ id, productId, quantity }) => {
   return result;
 };
 
+const destroy = async (id) => {
+  const saleId = await getById(id);
+  if (!saleId) throw new Error('Sale not found');
+
+  await SalesProductsModel.destroy(id);
+};
+
 module.exports = {
   getAll,
   getById,
   create,
   update,
+  destroy,
 };
