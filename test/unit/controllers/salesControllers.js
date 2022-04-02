@@ -159,6 +159,7 @@ describe("Camada de controller inserir novo produto no BD", () => {
       after(() => {
         SalesService.create.restore();
       });
+
       it("status esperado com o código 201", async () => {
         await SalesController.create(request, response);
 
@@ -169,6 +170,71 @@ describe("Camada de controller inserir novo produto no BD", () => {
         await SalesController.create(request, response);
 
         expect(response.json.calledWith(createData)).to.be.equal(true);
+      });
+    });
+  });
+
+  describe("quando hover um erro", () => {
+    describe("retorno da mensagem de erro", () => {
+      let response = {};
+      let request = {};
+      const createData = { message: "Such amount is not permitted to sell" };
+      const data = [
+        {
+          productId: 1,
+          quantity: 36,
+        },
+      ];
+
+      before(() => {
+        request.body = data;
+        response.status = sinon.stub().returns(response);
+        response.json = sinon.stub().returns(createData);
+        sinon
+          .stub(SalesService, "create")
+          .resolves(createData);
+      });
+
+      after(() => {
+        SalesService.create.restore();
+      });
+
+      it("mensagem de erro no formato json", async () => {
+        await SalesController.create(request, response);
+
+        expect(response.json.calledWith(createData)).to.be.equal(true);
+      });
+    });
+
+    describe("retorno esperado do status", () => {
+      let response = {};
+      let request = {};
+      const data = [
+        {
+          productId: 1,
+          quantity: 36,
+        },
+      ];
+      const createData = { message: "Such amount is not permitted to sell" };
+
+      before(() => {
+        request.body = data;
+        response = {};
+        response.status = sinon.stub().returns(response);
+        response.json = sinon.spy();
+        sinon
+          .stub(SalesService, "create")
+          .rejects(Error("Such amount is not permitted to sell"));
+      });
+
+      after(() => {
+        SalesService.create.restore();
+      });
+
+      it("status com dogigo 422", async () => {
+        await SalesController.create(request, response);
+
+        expect(response.status.calledWith(422)).to.be.equal(true);
       });
     });
   });

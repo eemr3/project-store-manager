@@ -16,8 +16,12 @@ const getById = async (req, res) => {
 };
 
 const create = async (req, res) => {
-  const result = await SalesProductsService.create(req.body);
-  res.status(201).json(result);
+  try {
+    const result = await SalesProductsService.create(req.body);
+    res.status(201).json(result);
+  } catch (error) {
+    res.status(422).json({ message: error.message });
+  }
 };
 
 const update = async (req, res) => {

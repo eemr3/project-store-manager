@@ -19,6 +19,12 @@ const create = async (values) => {
   const [{ id, name, quantity: qtd }] = await ProductsModel.getById(
     saleData.productId,
   );
+
+  if (qtd <= 0 || qtd < saleData.quantity) {
+    throw new
+      Error('Such amount is not permitted to sell');
+  }
+
   const quantity = qtd - saleData.quantity;
   await ProductsModel.update({ id, name, quantity });
 
