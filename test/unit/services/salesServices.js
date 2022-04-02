@@ -3,6 +3,7 @@ const sinon = require("sinon");
 
 const SalesService = require("../../../services/SalesProductsService");
 const SalesModel = require("../../../models/SalesProductsModel");
+const ProductsModel = require("../../../models/ProductsModel");
 
 const payloadSales = [
   {
@@ -95,10 +96,16 @@ describe("Insere uma nova venda no BD", () => {
         },
       ],
     });
+    sinon
+      .stub(ProductsModel, "getById")
+      .resolves([{ id: 1, name: "Martelo de Thor", quantity: 10 }]);
+    sinon.stub(ProductsModel, "update").resolves();
   });
 
   after(() => {
     SalesModel.create.restore();
+    ProductsModel.getById.restore();
+    ProductsModel.update.restore();
   });
 
   it("quando é inserido com sucesso", async () => {
@@ -135,7 +142,7 @@ describe("Realiza uma atualização em uma venda no BD", () => {
     { productId: 1, quantity: 6, date: "2022-04-02T01:51:03.000Z" },
   ];
 
-  describe('Não havendo o produto no BD', () => {
+  describe("Não havendo o produto no BD", () => {
     before(() => {
       sinon.stub(SalesModel, "update").resolves(dataMock);
       sinon.stub(SalesModel, "getById").resolves(returnById);
@@ -153,13 +160,11 @@ describe("Realiza uma atualização em uma venda no BD", () => {
           productId: 1,
           quantity: 6,
         });
-
       } catch (error) {
-        expect(error.message).to.be.equal('Sale not found');
+        expect(error.message).to.be.equal("Sale not found");
       }
-
     });
-  })
+  });
   describe("Atualização com sucesso", () => {
     before(() => {
       sinon.stub(SalesModel, "update").resolves(dataMock);

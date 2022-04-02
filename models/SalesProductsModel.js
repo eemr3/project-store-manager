@@ -44,7 +44,7 @@ const create = async (values) => {
     saleResult.push({
           productId,
           quantity,
-        });
+    });
   });
 
   return {
@@ -69,6 +69,7 @@ const update = async ({ id, productId, quantity }) => {
 };
 
 const destroy = async (id) => {
+  console.log(id);
   await connect.execute('DELETE FROM sales WHERE id = ?', [id]);
 };
 

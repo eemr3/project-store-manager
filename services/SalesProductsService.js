@@ -1,8 +1,9 @@
 const SalesProductsModel = require('../models/SalesProductsModel');
+const ProductsModel = require('../models/ProductsModel');
 
 const getAll = async () => {
   const result = await SalesProductsModel.getAll();
-  console.log(result);
+
   return result;
 };
 
@@ -14,7 +15,15 @@ const getById = async (id) => {
 };
 
 const create = async (values) => {
+  const [saleData] = values;
+  const [{ id, name, quantity: qtd }] = await ProductsModel.getById(
+    saleData.productId,
+  );
+  const quantity = qtd - saleData.quantity;
+  await ProductsModel.update({ id, name, quantity });
+
   const result = await SalesProductsModel.create(values);
+
   return result;
 };
 
@@ -22,17 +31,24 @@ const update = async ({ id, productId, quantity }) => {
   const saleId = await SalesProductsModel.getById(id);
 
   if (!saleId) throw new Error('Sale not found');
-
   const result = await SalesProductsModel.update({ id, productId, quantity });
 
   return result;
 };
 
 const destroy = async (id) => {
-  const saleId = await getById(id);
-  if (!saleId) throw new Error('Sale not found');
+  const [idProdSl] = await SalesProductsModel.getById(id);
+  console.log(idProdSl);
+  if (!idProdSl) throw new Error('Sale not found');
 
   await SalesProductsModel.destroy(id);
+  const [getProduct] = await ProductsModel.getById(
+    idProdSl.productId,
+  );
+
+  getProduct.quantity = Number(getProduct.quantity) + Number(idProdSl.quantity);
+
+  await ProductsModel.update(getProduct);
 };
 
 module.exports = {
