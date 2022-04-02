@@ -7,6 +7,13 @@ const salesAndProductsSerialize = (data) => ({
   date: data.date,
 });
 
+const salesByIdSerialize = (data) => ({
+    productId: data.product_id,
+    quantity: data.quantity,
+    date: data.date,
+  }
+);
+
 const getAll = async () => {
   const result = await connect.execute(`SELECT * FROM sales_products AS sp
   INNER JOIN sales AS s
@@ -24,7 +31,7 @@ const getById = async (id) => {
   WHERE s.id = ?;`, [id],
   );
 
-  return result[0].map(salesAndProductsSerialize);
+  return result[0].map(salesByIdSerialize);
 };
 
 const create = async (values) => {
@@ -66,6 +73,7 @@ const destroy = async (id) => {
 };
 
 module.exports = {
+  salesAndProductsSerialize,
   getAll,
   getById,
   create,
