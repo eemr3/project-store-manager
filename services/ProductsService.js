@@ -14,19 +14,14 @@ const getById = async (id) => {
   return product;
 };
 
-const getByName = async (productName) => {
-  const [name] = await ProductsModel.getByName(productName);
-
-  return name;
-};
-
 const create = async ({ name, quantity }) => {
-  const productName = await getByName(name);
-  const [{ insertId }] = await ProductsModel.create({ name, quantity });
+  const [productName] = await ProductsModel.getByName(name);
 
   if (productName !== undefined && productName.name === name) {
     throw new Error('Product already exists');
   }
+
+  const [{ insertId }] = await ProductsModel.create({ name, quantity });
 
   return {
     id: insertId,
@@ -36,9 +31,9 @@ const create = async ({ name, quantity }) => {
 };
 
 const update = async ({ id, name, quantity }) => {
-  const isExist = await getById(id);
+  const isExist = await ProductsModel.getById(id);
 
-  if (isExist === undefined) throw new Error('Product not found');
+  if (isExist.length === 0) throw new Error('Product not found');
 
   const result = await ProductsModel.update({ id, name, quantity });
 
@@ -46,9 +41,9 @@ const update = async ({ id, name, quantity }) => {
 };
 
 const destroy = async (id) => {
-  const isExist = await getById(id);
+  const isExist = await ProductsModel.getById(id);
 
-  if (isExist === undefined) throw new Error('Product not found');
+  if (isExist.length === 0) throw new Error('Product not found');
 
   await ProductsModel.destroy(id);
 };
@@ -56,7 +51,6 @@ const destroy = async (id) => {
 module.exports = {
   getAll,
   getById,
-  getByName,
   create,
   update,
   destroy,
