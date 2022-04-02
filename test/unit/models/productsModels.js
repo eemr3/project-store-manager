@@ -52,15 +52,36 @@ describe("devera realizar um pesquisa de todos os produtos", () => {
 
 describe("Busca um produto no BD pelo id", () => {
   const oneProduct = [
-      {
+    {
+      id: 1,
+      name: "Martelo de Thor",
+      quantity: 10,
+    },
+  ];
+  describe("retorno da busca", () => {
+    before(() => {
+      sinon.stub(connect, "execute").resolves(oneProduct);
+    });
+
+    after(() => {
+      connect.execute.restore();
+    });
+
+    it("retorna um produto", async () => {
+      const result = await ProductsMoel.getById(1);
+      expect(result).to.deep.include({
         id: 1,
         name: "Martelo de Thor",
         quantity: 10,
-      },
-    ]
+      });
+    });
+  });
+});
+
+describe("Busca um produto no BD pelo name", () => {
+  const nameProduct = [{ name: "Martelo de Thor" }];
   before(() => {
-    const idProd = 1;
-    sinon.stub(connect, "execute").resolves(oneProduct);
+    sinon.stub(connect, "execute").resolves(nameProduct);
   });
 
   after(() => {
@@ -68,15 +89,9 @@ describe("Busca um produto no BD pelo id", () => {
   });
 
   it("retorna um produto", async () => {
-    const result = await ProductsMoel.getById(1);
-    console.log(result);
-    expect(result).to.deep.include(
-      {
-        id: 1,
-        name: "Martelo de Thor",
-        quantity: 10,
-      },
-    );
+    const result = await ProductsMoel.getByName("Martelo de Thor");
+
+    expect(result).to.deep.include({ name: "Martelo de Thor" });
   });
 });
 
@@ -97,5 +112,35 @@ describe("Insere um novo produto no BD", () => {
       quantity: 20,
     });
     expect(result[0].insertId).to.be.equal(1);
+  });
+});
+
+describe("Realiza uma atualização em um produto no BD", () => {
+  describe("Atualização com sucesso", () => {
+    before(() => {
+      sinon.stub(connect, "execute").resolves({
+        id: 3,
+        name: "Capa do Batman",
+        quantity: "1000",
+      });
+    });
+
+    after(() => {
+      connect.execute.restore();
+    });
+
+    it("quando atualizado com sucesso", async () => {
+      const result = await ProductsMoel.update({
+        id: 3,
+        name: "Capa do Batman",
+        quantity: "1000",
+      });
+
+      expect(result).to.deep.equal({
+        id: 3,
+        name: "Capa do Batman",
+        quantity: "1000",
+      });
+    });
   });
 });
