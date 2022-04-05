@@ -1,8 +1,6 @@
-
 # Project Store Manager
 
 Prejto de back-end para acolocará em prática o conhecimento sobre padrões arquiteturais que adquiri no bloco 23, usando a arquitetura MSC (model-service-controller). Além disso, exercitará seus conhecimentos sobre REST, criando uma API completamente RESTful.
-
 
 ## Etiquetas
 
@@ -10,8 +8,6 @@ Prejto de back-end para acolocará em prática o conhecimento sobre padrões arq
 ![GitHub top language](https://img.shields.io/github/languages/top/eemr3/project-store-manager)
 ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/eemr3/project-store-manager)
 [![MIT License](https://img.shields.io/apm/l/atomic-design-ui.svg?)](https://github.com/tterb/atomic-design-ui/blob/master/LICENSEs)
-
-
 
 ## Aprendizados
 
@@ -28,11 +24,9 @@ Prejto de back-end para acolocará em prática o conhecimento sobre padrões arq
 - Saber as diferenças e quando aplicar testes unitários e de integração;
 - Desenvolver API's e arquiteturas orientadas a testes;
 
-
 ## Screenshots
 
 ![App Screenshot](https://user-images.githubusercontent.com/42968718/161570570-fe1ec79e-7f6a-4e84-a3a3-c0207daea509.png)
-
 
 ## Variáveis de Ambiente
 
@@ -45,8 +39,6 @@ Para rodar esse projeto, você vai precisar adicionar as seguintes variáveis de
 `MYSQL_PASSWORD`
 
 `PORT`
-
-
 
 ## Rodando localmente
 
@@ -73,7 +65,6 @@ Inicie o servidor
 ```bash
   npm run debug
 ```
-
 
 ## Licença
 
