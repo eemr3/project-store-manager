@@ -15,18 +15,18 @@ const getById = async (id) => {
 };
 
 const create = async (values) => {
-  const [saleData] = values;
-  const [{ id, name, quantity: qtd }] = await ProductsModel.getById(
-    saleData.productId,
-  );
+  await Promise.all(values.map(async (saleItem) => {
+    const [{ id, name, quantity: qtd }] = await ProductsModel.getById(
+      saleItem.productId,
+    );
 
-  if (qtd <= 0 || qtd < saleData.quantity) {
-    throw new
-      Error('Such amount is not permitted to sell');
-  }
+    if (qtd <= 0 || qtd < saleItem.quantity) {
+      throw new Error('Such amount is not permitted to sell');
+    }
 
-  const quantity = qtd - saleData.quantity;
-  await ProductsModel.update({ id, name, quantity });
+    const quantity = qtd - saleItem.quantity;
+    await ProductsModel.update({ id, name, quantity });
+  }));
 
   const result = await SalesProductsModel.create(values);
 
@@ -48,9 +48,7 @@ const destroy = async (id) => {
   if (!idProdSl) throw new Error('Sale not found');
 
   await SalesProductsModel.destroy(id);
-  const [getProduct] = await ProductsModel.getById(
-    idProdSl.productId,
-  );
+  const [getProduct] = await ProductsModel.getById(idProdSl.productId);
 
   getProduct.quantity = Number(getProduct.quantity) + Number(idProdSl.quantity);
 
